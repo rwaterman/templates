@@ -1,0 +1,13 @@
+services:
+  grafana:
+    image: grafana/grafana-oss
+    container_name: grafana-sandbox
+    restart: unless-stopped
+    environment:
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-polystat-panel
+    ports:
+      - '3000:3000'
+    volumes:
+      - 'grafana_storage:/var/lib/grafana'
+volumes:
+  grafana_storage: {}
