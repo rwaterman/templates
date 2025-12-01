@@ -1,0 +1,12 @@
+services:
+  ubuntu:
+    image: ubuntu:latest
+    container_name: ubuntu-latest
+    command: ["sleep", "infinity"]
+    tty: true
+    stdin_open: true
+    volumes:
+      - ./:/workspace
+    working_dir: /workspace
+    environment:
+      DEBIAN_FRONTEND: noninteractive
