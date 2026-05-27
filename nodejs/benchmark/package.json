@@ -1,0 +1,13 @@
+{
+  "name": "nodejs-benchmark",
+  "version": "1.0.0",
+  "description": "Node.js micro-benchmark suite — CPU, memory, I/O, and async patterns.",
+  "type": "module",
+  "scripts": {
+    "bench": "node --expose-gc benchmark_simple.js",
+    "bench:json": "node --expose-gc benchmark_simple.js --json",
+    "bench:no-gc": "node benchmark_simple.js"
+  },
+  "private": true
+}
+
