@@ -1,0 +1,12 @@
+*.pyc
+*.pyo
+.DS_Store
+.idea/
+.requirements.zip
+.terraform.lock.hcl
+.terraform/
+.venv/
+__pycache__/
+node_modules/
+terraform.tfvars
+tfplan
