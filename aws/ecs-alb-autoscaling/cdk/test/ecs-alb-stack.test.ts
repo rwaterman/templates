@@ -19,6 +19,9 @@ test("creates an AL2023 ECS capacity provider, ALB, and scalable service", () =>
   template.resourceCountIs("AWS::ECS::Service", 1);
   template.resourceCountIs("AWS::ApplicationAutoScaling::ScalableTarget", 1);
   template.resourceCountIs("AWS::AutoScaling::LaunchConfiguration", 0);
+  template.hasResource("AWS::AutoScaling::AutoScalingGroup", {
+    DependsOn: Match.arrayWith([Match.stringLikeRegexp("DefaultRoute")])
+  });
   template.hasResourceProperties("AWS::EC2::LaunchTemplate", {
     LaunchTemplateData: Match.objectLike({
       InstanceType: "t3.small",

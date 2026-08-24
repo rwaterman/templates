@@ -60,6 +60,11 @@ export class EcsAlbStack extends cdk.Stack {
 
     autoScalingGroup.applyRemovalPolicy(cdk.RemovalPolicy.DESTROY);
 
+    // Instances need the public route to reach ECS and ECR; on delete this also removes them before the route goes away.
+    for (const subnet of vpc.publicSubnets) {
+      autoScalingGroup.node.addDependency(subnet.internetConnectivityEstablished);
+    }
+
     const capacityProvider = new ecs.AsgCapacityProvider(this, "CapacityProvider", {
       autoScalingGroup,
       capacityProviderName: `capacity-ecs-alb-cdk-${props.environment}`,
