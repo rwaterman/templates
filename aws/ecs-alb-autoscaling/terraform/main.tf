@@ -259,6 +259,9 @@ resource "aws_autoscaling_group" "ecs" {
     }
   }
 
+  # Instances need the public route to reach ECS and ECR; on destroy this also removes them before the route goes away.
+  depends_on = [aws_route_table_association.public]
+
   lifecycle {
     ignore_changes = [desired_capacity]
   }
