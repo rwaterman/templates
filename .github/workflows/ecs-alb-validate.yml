@@ -1,0 +1,57 @@
+name: ecs-alb-validate
+
+on:
+  pull_request:
+    paths:
+      - aws/ecs-alb-autoscaling/**
+      - .github/workflows/ecs-alb-validate.yml
+  push:
+    branches: [main]
+    paths:
+      - aws/ecs-alb-autoscaling/**
+      - .github/workflows/ecs-alb-validate.yml
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: aws/ecs-alb-autoscaling
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: aws/ecs-alb-autoscaling/cdk/package-lock.json
+
+      - name: Test app
+        run: npm test
+        working-directory: aws/ecs-alb-autoscaling/app
+
+      - name: Install CDK dependencies
+        run: npm ci
+        working-directory: aws/ecs-alb-autoscaling/cdk
+
+      - name: Test CDK
+        run: npm test
+        working-directory: aws/ecs-alb-autoscaling/cdk
+
+      - name: Type-check CDK
+        run: npm run build
+        working-directory: aws/ecs-alb-autoscaling/cdk
+
+      - uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform format
+        run: terraform fmt -check -recursive terraform
+
+      - name: Terraform init
+        run: terraform -chdir=terraform init -backend=false
+
+      - name: Terraform validate
+        run: terraform -chdir=terraform validate
+
+      - name: Shell syntax
+        run: bash -n scripts/*.sh

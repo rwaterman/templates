@@ -10,3 +10,8 @@ __pycache__/
 node_modules/
 terraform.tfvars
 tfplan
+*.tfstate
+*.tfstate.*
+terraform.tfstate.d/
+cdk.out/
+cdk.context.json

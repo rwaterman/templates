@@ -8,6 +8,7 @@ For standalone scripts you run as-is, see [`utils`](https://github.com/rwaterman
 
 - `aws/cloudformation/` — VPC stack (`vpc.yml`, `vpc.parameters.example.json`) plus its companion `vpc_create.sh` / `remove_stack.sh` deploy helpers, and `prod-security-groups.yml`. The deploy script uses relative `file://vpc.yml`, so keep these together. Copy `vpc.parameters.example.json` to `vpc.parameters.json` and edit before deploying.
 - `aws/docker/amazon-linux/` — Amazon Linux `docker-compose.yml`.
+- `aws/ecs-alb-autoscaling/` — ECS on EC2 (Amazon Linux 2023) behind an ALB with service and capacity-provider autoscaling, implemented twice: CDK (TypeScript) and Terraform. Includes the sample Node.js app, `dev`/`prod` environments, deploy/destroy/load-test scripts, and its own CI (`ecs-alb-validate.yml`). See its `README.md`.
 - `docker/ubuntu-latest/` — Ubuntu `Dockerfile` + `docker-compose.yml` (see its `README.md`).
 - `grafana/` — Grafana `docker-compose.yml`.
 - `k3s/` — example nginx Deployment + Service manifests.
