@@ -62,6 +62,7 @@ export class EcsAlbStack extends cdk.Stack {
 
     const capacityProvider = new ecs.AsgCapacityProvider(this, "CapacityProvider", {
       autoScalingGroup,
+      capacityProviderName: `capacity-ecs-alb-cdk-${props.environment}`,
       enableManagedScaling: true,
       enableManagedTerminationProtection: false,
       targetCapacityPercent: 80,

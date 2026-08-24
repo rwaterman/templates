@@ -5,7 +5,11 @@ import { Match, Template } from "aws-cdk-lib/assertions";
 import { EcsAlbStack } from "../lib/ecs-alb-stack";
 
 test("creates an AL2023 ECS capacity provider, ALB, and scalable service", () => {
-  const app = new cdk.App();
+  const app = new cdk.App({
+    context: {
+      "@aws-cdk/aws-autoscaling:generateLaunchTemplateInsteadOfLaunchConfig": true
+    }
+  });
   const stack = new EcsAlbStack(app, "TestStack", {
     environment: "dev"
   });
@@ -14,8 +18,12 @@ test("creates an AL2023 ECS capacity provider, ALB, and scalable service", () =>
   template.resourceCountIs("AWS::ElasticLoadBalancingV2::LoadBalancer", 1);
   template.resourceCountIs("AWS::ECS::Service", 1);
   template.resourceCountIs("AWS::ApplicationAutoScaling::ScalableTarget", 1);
-  template.hasResourceProperties("AWS::AutoScaling::LaunchConfiguration", {
-    InstanceType: "t3.small"
+  template.resourceCountIs("AWS::AutoScaling::LaunchConfiguration", 0);
+  template.hasResourceProperties("AWS::EC2::LaunchTemplate", {
+    LaunchTemplateData: Match.objectLike({
+      InstanceType: "t3.small",
+      MetadataOptions: { HttpTokens: "required" }
+    })
   });
   template.hasResourceProperties("AWS::ElasticLoadBalancingV2::TargetGroup", {
     HealthCheckPath: "/health"
